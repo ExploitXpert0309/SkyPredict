@@ -1,9 +1,40 @@
-import { Download, History, Trash2, X } from 'lucide-react';
+import { useState } from 'react';
+import { Download, History, Loader2, Trash2, X } from 'lucide-react';
 import { weatherApi } from '../services/api.js';
 
+const FORMATS = [
+  { id: 'json', label: 'JSON' },
+  { id: 'csv', label: 'CSV' },
+  { id: 'xml', label: 'XML' },
+  { id: 'md', label: 'Markdown' },
+  { id: 'pdf', label: 'PDF' }
+];
+
 export default function HistoryPanel({ history, searches, onDelete, onSearch, onDeleteSearch, onClearSearches }) {
-  const download = (format) => {
-    window.location.assign(weatherApi.exportHistory(format));
+  const [pending, setPending] = useState(null);
+  const [exportError, setExportError] = useState('');
+
+  const download = async (format) => {
+    if (pending) return;
+    setPending(format);
+    setExportError('');
+    try {
+      const response = await fetch(weatherApi.exportHistory(format));
+      if (!response.ok) throw new Error(`Export failed (${response.status})`);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `weather-history.${format === 'markdown' ? 'md' : format}`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setExportError(err.message);
+    } finally {
+      setPending(null);
+    }
   };
 
   return (
@@ -16,10 +47,27 @@ export default function HistoryPanel({ history, searches, onDelete, onSearch, on
         <History className="text-coral" />
       </div>
 
-      <div className="mt-4 flex gap-2">
-        <button className="muted-btn py-2" type="button" onClick={() => download('json')}><Download size={16} />JSON</button>
-        <button className="muted-btn py-2" type="button" onClick={() => download('csv')}><Download size={16} />CSV</button>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {FORMATS.map((fmt) => {
+          const isLoading = pending === fmt.id;
+          return (
+            <button
+              key={fmt.id}
+              className="muted-btn py-2 disabled:opacity-60"
+              type="button"
+              onClick={() => download(fmt.id)}
+              disabled={pending !== null}
+              aria-busy={isLoading}
+            >
+              {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
+              {fmt.label}
+            </button>
+          );
+        })}
       </div>
+      {exportError && (
+        <p className="mt-2 text-xs font-semibold text-coral">{exportError}</p>
+      )}
 
       <div className="mt-4 max-h-80 space-y-2 overflow-auto pr-1">
         {history.length === 0 && <p className="text-sm text-slate-500">History appears after successful searches.</p>}

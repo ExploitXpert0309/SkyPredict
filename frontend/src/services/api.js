@@ -19,6 +19,7 @@ export const weatherApi = {
   search: (payload) => client.post('/weather', payload).then((res) => res.data.data),
   suggestions: (query) => client.get('/weather/suggestions', { params: { query } }).then((res) => res.data.data),
   historical: (payload) => client.post('/weather/historical', payload).then((res) => res.data.data),
+  range: (payload) => client.post('/weather/range', payload).then((res) => res.data.data),
   hourlyForecast: (payload) => client.post('/weather/hourly-forecast', payload).then((res) => res.data.data),
   history: () => client.get('/history').then((res) => res.data.data),
   searches: () => client.get('/history/searches').then((res) => res.data.data),

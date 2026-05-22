@@ -21,10 +21,13 @@ export const removeAllSearches = asyncHandler(async (_req, res) => {
   res.json({ success: true, data });
 });
 
+const SUPPORTED_FORMATS = new Set(['json', 'csv', 'xml', 'md', 'markdown', 'pdf']);
+
 export const downloadHistory = asyncHandler(async (req, res) => {
-  const format = req.query.format === 'csv' ? 'csv' : 'json';
+  const requested = (req.query.format || 'json').toLowerCase();
+  const format = SUPPORTED_FORMATS.has(requested) ? requested : 'json';
   const exported = await exportHistory(format);
   res.setHeader('Content-Type', exported.contentType);
-  res.setHeader('Content-Disposition', `attachment; filename="weather-history.${format}"`);
+  res.setHeader('Content-Disposition', `attachment; filename="weather-history.${exported.extension}"`);
   res.send(exported.body);
 });

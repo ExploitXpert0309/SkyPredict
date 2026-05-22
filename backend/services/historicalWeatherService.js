@@ -37,6 +37,62 @@ const average = (values = []) => {
   return Number((valid.reduce((sum, value) => sum + value, 0) / valid.length).toFixed(1));
 };
 
+export const getHistoricalRange = async ({ location, startDate, endDate }) => {
+  const key = `historical-range:${location.lat}:${location.lon}:${startDate}:${endDate}`;
+
+  return getOrSetCache(key, 3600, async () => {
+    const { data } = await archiveClient.get('/v1/archive', {
+      params: {
+        latitude: location.lat,
+        longitude: location.lon,
+        start_date: startDate,
+        end_date: endDate,
+        timezone: 'auto',
+        temperature_unit: 'celsius',
+        wind_speed_unit: 'ms',
+        daily: [
+          'weather_code',
+          'temperature_2m_max',
+          'temperature_2m_min',
+          'temperature_2m_mean',
+          'apparent_temperature_mean',
+          'precipitation_sum',
+          'wind_speed_10m_max'
+        ].join(',')
+      }
+    });
+
+    if (!data?.daily?.time?.length) {
+      throw new ApiError(404, 'Historical weather is not available for the selected date range and location.');
+    }
+
+    const daily = data.daily;
+    const days = daily.time.map((time, index) => {
+      const code = daily.weather_code?.[index];
+      return {
+        date: time,
+        condition: weatherCodeMap[code] || 'Historical weather',
+        weatherCode: code,
+        temperatureMean: daily.temperature_2m_mean?.[index] ?? null,
+        temperatureMax: daily.temperature_2m_max?.[index] ?? null,
+        temperatureMin: daily.temperature_2m_min?.[index] ?? null,
+        feelsLikeMean: daily.apparent_temperature_mean?.[index] ?? null,
+        precipitation: daily.precipitation_sum?.[index] ?? null,
+        windSpeedMax: daily.wind_speed_10m_max?.[index] ?? null
+      };
+    });
+
+    return {
+      location,
+      startDate,
+      endDate,
+      timezone: data.timezone || 'auto',
+      source: 'Open-Meteo Historical Weather API',
+      days
+    };
+  });
+};
+
 export const getHistoricalWeather = async ({ location, date }) => {
   const key = `historical:${location.lat}:${location.lon}:${date}`;
 

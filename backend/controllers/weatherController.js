@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { ApiError } from '../utils/ApiError.js';
 import { getLocationSuggestions, getWeatherBundle, resolveLocation } from '../services/openWeatherService.js';
-import { getHistoricalWeather } from '../services/historicalWeatherService.js';
+import { getHistoricalRange, getHistoricalWeather } from '../services/historicalWeatherService.js';
 import { getHourlyForecast } from '../services/hourlyForecastService.js';
 import { getTimezone } from '../services/timezoneService.js';
 import { getTravelVideos } from '../services/youtubeService.js';
@@ -12,6 +12,7 @@ import {
   getHistory,
   saveSearch,
   saveWeatherHistory,
+  saveWeatherRange,
   updateHistory
 } from '../services/supabaseService.js';
 
@@ -43,6 +44,34 @@ export const historicalWeatherSchema = z.object({
   }, {
     path: ['date'],
     message: 'Select a past date. Today and future dates are not available for historical weather.'
+  })
+});
+
+export const weatherRangeSchema = z.object({
+  body: z.object({
+    query: z.string().trim().max(160).optional(),
+    latitude: z.number().min(-90).max(90).optional(),
+    longitude: z.number().min(-180).max(180).optional(),
+    startDate: dateOnlySchema,
+    endDate: dateOnlySchema
+  }).refine((data) => data.query || (Number.isFinite(data.latitude) && Number.isFinite(data.longitude)), {
+    message: 'Provide a query or latitude and longitude.'
+  }).refine((data) => new Date(data.startDate) <= new Date(data.endDate), {
+    path: ['endDate'],
+    message: 'End date must be on or after start date.'
+  }).refine((data) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return new Date(data.endDate) <= today;
+  }, {
+    path: ['endDate'],
+    message: 'End date must be today or earlier.'
+  }).refine((data) => {
+    const days = Math.round((new Date(data.endDate) - new Date(data.startDate)) / 86400000) + 1;
+    return days <= 31;
+  }, {
+    path: ['endDate'],
+    message: 'Range cannot exceed 31 days.'
   })
 });
 
@@ -118,6 +147,33 @@ export const postHistoricalWeather = asyncHandler(async (req, res) => {
   const location = await resolveLocation(req.body);
   const historical = await getHistoricalWeather({ location, date: req.body.date });
   res.status(200).json({ success: true, data: historical });
+});
+
+export const postWeatherRange = asyncHandler(async (req, res) => {
+  const location = await resolveLocation(req.body);
+  const range = await getHistoricalRange({
+    location,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate
+  });
+
+  const persistence = await Promise.allSettled([
+    saveSearch({
+      query: req.body.query || `${location.lat},${location.lon} (${req.body.startDate} → ${req.body.endDate})`,
+      searchType: 'date_range'
+    }),
+    saveWeatherRange({ location, days: range.days })
+  ]);
+
+  const savedRows = persistence[1].status === 'fulfilled' ? persistence[1].value : [];
+  const warnings = persistence.some((result) => result.status === 'rejected')
+    ? ['Range loaded, but persistence failed. Verify Supabase settings, schema, and policies.']
+    : [];
+
+  res.status(201).json({
+    success: true,
+    data: { ...range, savedCount: savedRows.length, warnings }
+  });
 });
 
 export const postHourlyForecast = asyncHandler(async (req, res) => {

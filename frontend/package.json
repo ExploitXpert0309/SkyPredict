@@ -10,7 +10,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "ai-weather-forecast-app": "file:..",
     "axios": "^1.7.7",
     "framer-motion": "^11.11.9",
     "lucide-react": "^0.468.0",

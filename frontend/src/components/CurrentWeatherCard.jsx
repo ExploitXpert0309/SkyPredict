@@ -1,4 +1,4 @@
-import { Droplets, Eye, Gauge, Sunrise, Sunset, Thermometer, Wind } from 'lucide-react';
+import { Cloud, Droplets, Eye, Gauge, Sunrise, Sunset, Thermometer, Wind } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { formatTime, iconUrl, visibilityKm } from '../utils/weather.js';
 
@@ -55,7 +55,7 @@ export default function CurrentWeatherCard({ weather }) {
           <Stat icon={Sunset} label="Sunset" value={formatTime(current.sys.sunset, timezoneOffset)} />
           <Stat icon={Thermometer} label="High / Low" value={`${Math.round(current.main.temp_max)}° / ${Math.round(current.main.temp_min)}°`} />
           <Stat icon={Gauge} label="Local Time" value={weather.timezone?.formatted?.slice(11, 16) || 'N/A'} />
-          <Stat icon={Thermometer} label="UV Index" value={weather.uvIndex?.value ?? 'N/A'} />
+          <Stat icon={Cloud} label="Cloud Cover" value={`${current.clouds?.all ?? 0}%`} />
         </div>
       </div>
     </motion.section>

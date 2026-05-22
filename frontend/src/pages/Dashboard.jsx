@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import AirQualityCard from '../components/AirQualityCard.jsx';
 import ComparisonPanel from '../components/ComparisonPanel.jsx';
 import CurrentWeatherCard from '../components/CurrentWeatherCard.jsx';
+import DateRangePanel from '../components/DateRangePanel.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import FavoritesPanel from '../components/FavoritesPanel.jsx';
 import Footer from '../components/Footer.jsx';
@@ -230,6 +231,11 @@ export default function Dashboard() {
                 error={historicalError}
               />
               <ForecastGrid forecast={weather.forecast} onSelectDay={openForecastDay} />
+              <DateRangePanel weather={weather} onSubmit={async (payload) => {
+                const data = await weatherApi.range(payload);
+                refreshCollections();
+                return data;
+              }} />
               <div className="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
                 <AirQualityCard airQuality={weather.airQuality} />
                 <Recommendations recommendations={weather.recommendations} />

@@ -310,11 +310,10 @@ export const getWeatherBundle = async (location) => {
       units: 'metric'
     };
 
-    const [current, forecast, air, uv] = await Promise.all([
+    const [current, forecast, air] = await Promise.all([
       weatherClient.get('/data/2.5/weather', { params }),
       weatherClient.get('/data/2.5/forecast', { params }),
-      weatherClient.get('/data/2.5/air_pollution', { params }),
-      weatherClient.get('/data/2.5/uvi', { params }).catch(() => ({ data: null }))
+      weatherClient.get('/data/2.5/air_pollution', { params })
     ]);
 
     return {
@@ -322,7 +321,7 @@ export const getWeatherBundle = async (location) => {
       current: current.data,
       forecast: forecast.data,
       airQuality: air.data,
-      uvIndex: uv.data
+      uvIndex: null
     };
   });
 };
