@@ -1,0 +1,19 @@
+{
+  "name": "ai-weather-forecast-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack AI-powered weather intelligence platform for PM Accelerator assessment.",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "free:ports": "powershell -ExecutionPolicy Bypass -File scripts/free-ports.ps1",
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "dev:fresh": "npm run free:ports && npm run dev",
+    "build": "npm run build --prefix frontend",
+    "lint": "npm run lint --prefix backend && npm run lint --prefix frontend",
+    "audit:all": "npm audit --audit-level=moderate && npm audit --prefix backend --audit-level=moderate && npm audit --prefix frontend --audit-level=moderate",
+    "start": "npm run start --prefix backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

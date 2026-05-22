@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(16, 184, 199, 0.12), transparent 28%),
+    radial-gradient(circle at 88% 10%, rgba(255, 112, 88, 0.1), transparent 24%),
+    linear-gradient(180deg, #fbfdff 0%, #f4f8fb 44%, #f8fafc 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.weather-sunny {
+  background:
+    radial-gradient(circle at 82% 10%, rgba(245, 184, 65, 0.24), transparent 22%),
+    radial-gradient(circle at 10% 14%, rgba(16, 184, 199, 0.12), transparent 28%),
+    linear-gradient(135deg, #fffaf0 0%, #eef9fb 40%, #fbfdff 74%, #ffffff 100%);
+}
+
+.weather-rain {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(16, 184, 199, 0.14), transparent 28%),
+    linear-gradient(135deg, #f3f8fb 0%, #e2edf3 46%, #fcfdff 100%);
+}
+
+.weather-clouds {
+  background:
+    radial-gradient(circle at 20% 16%, rgba(255, 255, 255, 0.92), transparent 24%),
+    radial-gradient(circle at 82% 4%, rgba(255, 112, 88, 0.08), transparent 26%),
+    linear-gradient(135deg, #fbfdfe 0%, #e7f0f4 46%, #ffffff 100%);
+}
+
+.weather-night {
+  background:
+    radial-gradient(circle at 82% 12%, rgba(245, 184, 65, 0.14), transparent 18%),
+    radial-gradient(circle at 16% 16%, rgba(16, 184, 199, 0.12), transparent 28%),
+    linear-gradient(135deg, #f7f9fd 0%, #edf3f7 45%, #ffffff 100%);
+}
+
+.dark .weather-sunny,
+.dark .weather-rain,
+.dark .weather-clouds,
+.dark .weather-night {
+  background:
+    radial-gradient(circle at 80% 14%, rgba(255, 255, 255, 0.26), transparent 14%),
+    linear-gradient(135deg, #101b33 0%, #244056 52%, #111827 100%);
+}
+
+.panel {
+  @apply rounded-lg border border-slate-200/80 bg-white/95 shadow-panel backdrop-blur-sm dark:border-white/10 dark:bg-slate-950/60;
+}
+
+.soft-card {
+  @apply rounded-lg border border-slate-200/80 bg-slate-50/90 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none;
+}
+
+.eyebrow {
+  @apply text-xs font-bold uppercase text-aqua;
+}
+
+.icon-btn {
+  @apply inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white/95 text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-aqua hover:text-ink hover:shadow-md focus:outline-none focus:ring-2 focus:ring-aqua/50 dark:border-white/10 dark:bg-slate-900 dark:text-slate-100;
+}
+
+.primary-btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-ink px-4 py-3 font-semibold text-white shadow-glow transition hover:-translate-y-0.5 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-aqua/60 dark:bg-aqua dark:text-slate-950 dark:hover:bg-cyan-300;
+}
+
+.muted-btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white/95 px-4 py-3 font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-aqua hover:text-ink dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100;
+}
+
+.skeleton {
+  @apply animate-pulse rounded-lg bg-slate-200/70 dark:bg-slate-800;
+}

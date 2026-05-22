@@ -1,0 +1,30 @@
+{
+  "name": "ai-weather-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "lint": "node --check server.js && node --check config/env.js && node --check config/supabase.js && node --check controllers/weatherController.js && node --check controllers/historyController.js && node --check controllers/favoritesController.js && node --check middleware/errorHandler.js && node --check middleware/validate.js && node --check routes/index.js && node --check routes/weatherRoutes.js && node --check routes/historyRoutes.js && node --check routes/favoritesRoutes.js && node --check services/historicalWeatherService.js && node --check services/hourlyForecastService.js && node --check services/openWeatherService.js && node --check services/recommendationService.js && node --check services/supabaseService.js && node --check services/timezoneService.js && node --check services/youtubeService.js && node --check utils/ApiError.js && node --check utils/asyncHandler.js && node --check utils/cache.js"
+  },
+  "dependencies": {
+    "@json2csv/plainjs": "^7.0.6",
+    "@supabase/supabase-js": "^2.45.4",
+    "ai-weather-forecast-app": "file:..",
+    "axios": "^1.7.7",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "node-cache": "^5.1.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
