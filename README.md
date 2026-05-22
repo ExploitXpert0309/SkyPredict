@@ -1,20 +1,24 @@
 # SkyPredict — AI Weather Forecast App
 
+## 🚀 Live Demo
+
+> ### 🌐 **Live App:** **http://159.65.152.242:8084**
+> ### 🎥 **Demo Video:** _________________________________________
+> _(paste the YouTube / Google Drive / Loom URL here once recorded)_
+
+| Resource | URL |
+|---|---|
+| 🌐 **Live App** | **http://159.65.152.242:8084** |
+| 🔌 **Live API Health** | http://159.65.152.242:8084/api/health |
+| 🎥 **Demo Video (1–2 min)** | _add URL here_ |
+| 💻 **GitHub Repo** | https://github.com/DarkMatrix07/skypredict-v2 |
+
+---
+
 **Developed by:** Srinivas Gummadidala
 **Assessment:** PM Accelerator AI Engineer Internship — Technical Assessment (Full Stack)
 **LinkedIn:** https://www.linkedin.com/in/srinivas-gummadidala/
 **Repository:** https://github.com/DarkMatrix07/skypredict-v2
-
----
-
-## 🔗 Live Links
-
-| Resource | URL |
-|---|---|
-| **🌐 Live App** | http://159.65.152.242:8084 |
-| **🔌 Live API** | http://159.65.152.242:8084/api/health |
-| **🎥 Demo Video (1–2 min)** | **PASTE YOUR VIDEO URL HERE** _(YouTube / Google Drive / Loom)_ |
-| **💻 GitHub Repo** | https://github.com/DarkMatrix07/skypredict-v2 |
 
 ---
 
@@ -262,10 +266,10 @@ Manual testing walkthrough: [`docs/testing-instructions.md`](docs/testing-instru
 
 ## 🎥 Demo Video
 
-> **PASTE YOUR VIDEO LINK HERE → ______________________________**
+> **Video URL:** _________________________________________
 >
-> (YouTube, Google Drive, Loom, Vimeo — any viewable URL works.
-> Replace this placeholder once recorded, and also update the table at the top of this README.)
+> _(YouTube, Google Drive, Loom, Vimeo — any viewable URL works.
+> Replace this placeholder once recorded, and also update the table at the top of this README.)_
 
 Script: [`docs/demo-video-script.md`](docs/demo-video-script.md).
 
